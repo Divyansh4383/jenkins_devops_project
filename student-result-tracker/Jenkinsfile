@@ -16,8 +16,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building the Docker image..."
-                // Build the image using the Dockerfile in the current directory
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                // Build the image using the Dockerfile in the student-result-tracker directory
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./student-result-tracker"
             }
         }
         
