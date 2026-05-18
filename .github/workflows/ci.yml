@@ -19,7 +19,7 @@ jobs:
       - name: Build Docker image
         run: |
           # Build the Docker image with a tag 'latest'
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/student-tracker:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/student-tracker:latest ./student-result-tracker
 
       # Step 3: Login to Docker Hub using GitHub Secrets
       - name: Login to Docker Hub
