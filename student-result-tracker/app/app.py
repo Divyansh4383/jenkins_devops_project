@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
@@ -48,6 +48,10 @@ def process_student(student):
         "average": average,
         "grade": grade
     }
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
 
 @app.route('/students', methods=['GET'])
 def get_students():

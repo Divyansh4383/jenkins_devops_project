@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Result Tracker</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Toast notifications library -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="container">
+        <header class="glass-panel">
+            <h1>Student Result Tracker</h1>
+            <p>Manage records, marks, and view grades instantly.</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Forms Section -->
+            <div class="forms-container">
+                <!-- Add Student Form -->
+                <section class="glass-panel card">
+                    <h2>Add New Student</h2>
+                    <form id="add-student-form">
+                        <div class="input-group">
+                            <label for="student-name">Full Name</label>
+                            <input type="text" id="student-name" required placeholder="e.g. John Doe">
+                        </div>
+                        <div class="input-group">
+                            <label for="student-roll">Roll Number</label>
+                            <input type="text" id="student-roll" required placeholder="e.g. 105">
+                        </div>
+                        <button type="submit" class="btn primary-btn">Add Student</button>
+                    </form>
+                </section>
+
+                <!-- Add Marks Form -->
+                <section class="glass-panel card">
+                    <h2>Record Subject Marks</h2>
+                    <form id="add-marks-form">
+                        <div class="input-group">
+                            <label for="mark-roll">Roll Number</label>
+                            <input type="text" id="mark-roll" required placeholder="e.g. 101">
+                        </div>
+                        <div class="input-group">
+                            <label for="mark-subject">Subject</label>
+                            <input type="text" id="mark-subject" required placeholder="e.g. Mathematics">
+                        </div>
+                        <div class="input-group">
+                            <label for="mark-score">Marks (out of 100)</label>
+                            <input type="number" id="mark-score" required min="0" max="100" placeholder="e.g. 85">
+                        </div>
+                        <button type="submit" class="btn secondary-btn">Update Marks</button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Dashboard Section -->
+            <section class="dashboard glass-panel">
+                <div class="dashboard-header">
+                    <h2>Student Records</h2>
+                    <button id="refresh-btn" class="btn icon-btn" aria-label="Refresh Data">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table id="students-table">
+                        <thead>
+                            <tr>
+                                <th>Roll No</th>
+                                <th>Name</th>
+                                <th>Subjects/Marks</th>
+                                <th>Average</th>
+                                <th>Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-tbody">
+                            <!-- Data populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
