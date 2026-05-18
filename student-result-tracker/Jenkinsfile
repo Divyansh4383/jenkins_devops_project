@@ -17,7 +17,7 @@ pipeline {
             steps {
                 echo "Building the Docker image..."
                 // Build the image using the Dockerfile in the student-result-tracker directory
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./student-result-tracker"
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./student-result-tracker'
             }
         }
         
@@ -26,17 +26,17 @@ pipeline {
             steps {
                 echo "Testing the application..."
                 // Run the container in detached mode to test it
-                sh "docker run -d -p 5000:5000 --name test-app ${IMAGE_NAME}:${IMAGE_TAG}"
+                sh 'docker run -d -p 5000:5000 --name test-app ${IMAGE_NAME}:${IMAGE_TAG}'
                 
                 // Wait for the application to start
                 sleep 5
                 
                 // Run a curl command to check if the /students endpoint is responsive
-                sh "curl -f http://localhost:5000/students"
+                sh 'curl -f http://localhost:5000/students'
                 
                 // Clean up the test container
-                sh "docker stop test-app"
-                sh "docker rm test-app"
+                sh 'docker stop test-app'
+                sh 'docker rm test-app'
             }
         }
         
@@ -45,16 +45,16 @@ pipeline {
             steps {
                 echo "Pushing the image to Docker Hub..."
                 // Login to Docker Hub using the provided credentials
-                sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+                sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                 
                 // Tag the local image with the Docker Hub username repository
-                sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${FULL_IMAGE_NAME}"
+                sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${FULL_IMAGE_NAME}'
                 
                 // Push the image to the repository
-                sh "docker push ${FULL_IMAGE_NAME}"
+                sh 'docker push ${FULL_IMAGE_NAME}'
                 
                 // Logout to clear credentials
-                sh "docker logout"
+                sh 'docker logout'
             }
         }
     }
