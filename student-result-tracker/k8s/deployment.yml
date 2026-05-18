@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-tracker
+  labels:
+    app: student-tracker
+spec:
+  # Specify the number of pod replicas to run
+  replicas: 2
+  selector:
+    matchLabels:
+      app: student-tracker
+  template:
+    metadata:
+      labels:
+        app: student-tracker
+    spec:
+      containers:
+      - name: student-tracker
+        # Replace 'yourusername' with your actual Docker Hub username
+        image: yourusername/student-tracker:latest
+        imagePullPolicy: Always
+        ports:
+        # The port that the container exposes (Flask default is 5000)
+        - containerPort: 5000
