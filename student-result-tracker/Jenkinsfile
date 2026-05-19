@@ -2,7 +2,6 @@ pipeline {
     agent any
     
     environment {
-        // Environment variables for Docker Hub credentials and image details
         DOCKER_HUB_CREDENTIALS_ID = 'dockerhub-credentials'
         DOCKER_USER = credentials('DOCKER_USER') // Placeholder for Docker Hub username
         DOCKER_PASS = credentials('DOCKER_PASS') // Placeholder for Docker Hub password
@@ -67,7 +66,7 @@ pipeline {
         failure {
             echo "Pipeline failed!"
             // Ensure cleanup in case of failure during testing
-            sh "docker rm -f test-app || true"
+            bat "docker rm -f test-app || exit 0"
         }
     }
 }
