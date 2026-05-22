@@ -5,13 +5,10 @@ metadata:
   labels:
     app: student-tracker
 spec:
-  # Using NodePort to expose the service on a static port on each Node's IP
   type: NodePort
   selector:
     app: student-tracker
   ports:
     - port: 5000
-      # The port that the container is listening on
       targetPort: 5000
-      # The port that will be accessible externally via http://localhost:30001
       nodePort: 30001

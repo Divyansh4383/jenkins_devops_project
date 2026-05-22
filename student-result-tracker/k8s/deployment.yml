@@ -17,9 +17,7 @@ spec:
     spec:
       containers:
       - name: student-tracker
-        # Replace 'yourusername' with your actual Docker Hub username
-        image: yourusername/student-tracker:latest
+        image: divyansh4383/student-tracker:latest
         imagePullPolicy: Always
         ports:
-        # The port that the container exposes (Flask default is 5000)
         - containerPort: 5000
