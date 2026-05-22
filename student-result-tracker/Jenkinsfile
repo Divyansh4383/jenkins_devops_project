@@ -1,64 +1,59 @@
+
 pipeline {
     agent any
-
+    
     environment {
-        DOCKER_USER = credentials('DOCKER_USER')
-        DOCKER_PASS = credentials('DOCKER_PASS')
+        DOCKER_HUB_CREDENTIALS_ID = 'dockerhub-credentials'
+        DOCKER_USER = credentials('DOCKER_USER') 
+        DOCKER_PASS = credentials('DOCKER_PASS') 
         IMAGE_NAME = "student-tracker"
         IMAGE_TAG = "latest"
+        FULL_IMAGE_NAME = "${DOCKER_USER}/${IMAGE_NAME}:${IMAGE_TAG}"
     }
 
     stages {
-
-        stage('Clone Repository') {
-            steps {
-                echo "Cloning repository..."
-                git branch: 'main',
-                    url: 'https://github.com/Divyansh4383/jenkins_devops_project.git'
-            }
-        }
-
+        // Stage 1: Build the Docker image
         stage('Build') {
             steps {
-                echo "Building Docker image..."
-                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./student-result-tracker"
+                echo "Building the Docker image..."
+                bat 'docker build -t %IMAGE_NAME%:%IMAGE_TAG% ./student-result-tracker'
             }
         }
-
+        
         stage('Test') {
             steps {
                 echo "Testing the application..."
-                sh "docker run -d -p 5000:5000 --name test-app ${IMAGE_NAME}:${IMAGE_TAG}"
-
+                bat 'docker run -d -p 5000:5000 --name test-app %IMAGE_NAME%:%IMAGE_TAG%'
+                
                 sleep 5
-
-                sh "curl -f http://localhost:5000/students"
-
-                sh "docker stop test-app"
-                sh "docker rm test-app"
+                
+                bat 'curl -f http://localhost:5000/students'
+                
+                bat 'docker stop test-app'
+                bat 'docker rm test-app'
             }
         }
-
+        
         stage('Push') {
             steps {
-                echo "Pushing image to Docker Hub..."
-                sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
-                sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} $DOCKER_USER/${IMAGE_NAME}:${IMAGE_TAG}"
-                sh "docker push $DOCKER_USER/${IMAGE_NAME}:${IMAGE_TAG}"
-                sh "docker logout"
+                echo "Pushing the image to Docker Hub..."
+                bat 'echo %DOCKER_PASS%| docker login -u %DOCKER_USER% --password-stdin'
+                
+                bat 'docker tag %IMAGE_NAME%:%IMAGE_TAG% %FULL_IMAGE_NAME%'
+                
+                bat 'docker push %FULL_IMAGE_NAME%'
+                bat 'docker logout'
             }
         }
     }
-
+    
     post {
         success {
-            echo '✅ Pipeline successful!'
+            echo "Pipeline successful!"
         }
         failure {
-            node('') {
-                sh 'docker rm -f test-app || true'
-            }
-            echo '❌ Pipeline failed!'
+            echo "Pipeline failed!"
+            bat "docker rm -f test-app || exit 0"
         }
     }
 }
